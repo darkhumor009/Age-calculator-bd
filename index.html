@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator - বয়স ক্যালকুলেটর</title>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-body: radial-gradient(circle at top center, #1c1d50 0%, #080a1e 100%);
+      --text-main: #ffffff;
+      --text-sub: #94a3b8;
+      --card-bg: rgba(18, 24, 58, 0.75);
+      --card-border: rgba(139, 92, 246, 0.25);
+      --header-bg: rgba(255, 255, 255, 0.03);
+      --input-bg: rgba(15, 23, 42, 0.7);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --feature-bg: rgba(18, 24, 58, 0.5);
+      --stat-card-bg: rgba(15, 23, 42, 0.6);
+      --footer-bg: rgba(10, 14, 35, 0.85);
+      --menu-bg: #0f172a;
+      --modal-bg: #1e1b4b;
+    }
+
+    body.light-mode {
+      --bg-body: radial-gradient(circle at top center, #f1f5f9 0%, #cbd5e1 100%);
+      --text-main: #0f172a;
+      --text-sub: #475569;
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(99, 102, 241, 0.3);
+      --header-bg: rgba(255, 255, 255, 0.7);
+      --input-bg: rgba(241, 245, 249, 0.9);
+      --input-border: rgba(0, 0, 0, 0.15);
+      --feature-bg: rgba(255, 255, 255, 0.75);
+      --stat-card-bg: rgba(241, 245, 249, 0.8);
+      --footer-bg: rgba(226, 232, 240, 0.9);
+      --menu-bg: #ffffff;
+      --modal-bg: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Hind Siliguri', 'Poppins', 'Noto Sans Devanagari', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      background: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 540px;
+      padding: 0 15px 30px 15px;
+    }
+
+    /* Header Navbar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      width: 100%;
+      background: var(--header-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    }
+
+    .logo-text h2 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--text-main);
+    }
+
+    .logo-text span {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Language Toggle Switch Button */
+    .lang-toggle-btn {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 5px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .lang-toggle-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 3px;
+      display: flex;
+      gap: 3px;
+      border: 1px solid var(--input-border);
+    }
+
+    .theme-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-sub);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+
+    .theme-btn.active {
+      background: #6366f1;
+      color: #fff;
+    }
+
+    .menu-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--input-border);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Slide Mobile Menu */
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      display: none;
+    }
+
+    .menu-overlay.active {
+      display: block;
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: -280px;
+      width: 280px;
+      height: 100%;
+      background: var(--menu-bg);
+      z-index: 999;
+      padding: 25px 20px;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
+      transition: right 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-menu.active {
+      right: 0;
+    }
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--input-border);
+      padding-bottom: 15px;
+    }
+
+    .menu-header h3 {
+      color: var(--text-main);
+      font-size: 18px;
+    }
+
+    .close-menu-btn {
+      background: none;
+      border: none;
+      color: var(--text-sub);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .menu-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-links a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .menu-links a:hover {
+      background: rgba(99, 102, 241, 0.15);
+      color: #6366f1;
+    }
+
+    /* Modals for Menu Pages */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--modal-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--input-border);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      color: #818cf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .close-modal-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text-main);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .modal-body {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .modal-body h4 {
+      font-size: 15px;
+      color: #38bdf8;
+      margin: 14px 0 6px 0;
+    }
+
+    .modal-body p {
+      margin-bottom: 10px;
+      color: var(--text-sub);
+    }
+
+    .modal-body ul {
+      margin-left: 20px;
+      margin-bottom: 10px;
+      color: var(--text-sub);
+    }
+
+    .modal-body a {
+      color: #818cf8;
+      text-decoration: none;
+    }
+
+    .modal-body a:hover {
+      text-decoration: underline;
+    }
+
+    /* Live Breaking News Ticker */
+    .news-ticker-container {
+      width: 100%;
+      background: linear-gradient(90deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      margin-bottom: 25px;
+    }
+
+    body.light-mode .news-ticker-container {
+      background: linear-gradient(90deg, #e0e7ff 0%, #c7d2fe 50%, #e0e7ff 100%);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .ticker-badge {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      z-index: 2;
+      border-radius: 30px 0 0 30px;
+      box-shadow: 3px 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .ticker-content {
+      overflow: hidden;
+      white-space: nowrap;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-text {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: marquee 28s linear infinite;
+      font-size: 13.5px;
+      color: #f1f5f9;
+      font-weight: 500;
+    }
+
+    body.light-mode .ticker-text {
+      color: #1e1b4b;
+    }
+
+    .ticker-text:hover {
+      animation-play-state: paused;
+    }
+
+    .ticker-text span.sep {
+      margin: 0 15px;
+      color: #c084fc;
+      font-weight: bold;
+    }
+
+    @keyframes marquee {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .hero-icon-wrapper {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      border-radius: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      color: #fff;
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+      margin-bottom: 15px;
+    }
+
+    .hero-title {
+      font-size: 34px;
+      font-weight: 800;
+      background: linear-gradient(to right, #ffffff, #c084fc, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    body.light-mode .hero-title {
+      background: linear-gradient(to right, #1e293b, #7c3aed, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--text-sub);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Calculation Card */
+    .calc-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      margin-bottom: 25px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    .card-header i {
+      color: #818cf8;
+    }
+
+    .date-selectors {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .select-group {
+      position: relative;
+    }
+
+    .select-group i.left-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      pointer-events: none;
+      font-size: 14px;
+    }
+
+    .select-group select {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text-main);
+      padding: 12px 10px 12px 34px;
+      border-radius: 12px;
+      outline: none;
+      appearance: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .select-group select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .arrow-down {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      pointer-events: none;
+      font-size: 12px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #8b5cf6 0%, #3b82f6 100%);
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+      margin-bottom: 12px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-icon-right {
+      background: rgba(255, 255, 255, 0.2);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+    }
+
+    .btn-reset {
+      width: 100%;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--input-border);
+      border-radius: 30px;
+      color: var(--text-main);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* Result Box Section */
+    .result-box {
+      display: none;
+      margin-top: 25px;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .result-box.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .main-age-card {
+      padding: 18px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .result-title {
+      color: #c084fc;
+      font-size: 14px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    body.light-mode .result-title {
+      color: #7c3aed;
+    }
+
+    .result-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #38bdf8;
+    }
+
+    body.light-mode .result-value {
+      color: #0284c7;
+    }
+
+    /* Elapsed Time Section */
+    .elapsed-section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .elapsed-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: var(--stat-card-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .stat-card .val {
+      font-size: 18px;
+      font-weight: 700;
+      color: #a855f7;
+    }
+
+    body.light-mode .stat-card .val {
+      color: #6d28d9;
+    }
+
+    .stat-card .lbl {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .feature-card {
+      background: var(--feature-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      padding: 16px 8px;
+      text-align: center;
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px auto;
+      font-size: 18px;
+    }
+
+    .bg-green { background: #10b981; color: #fff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+    .bg-blue { background: #3b82f6; color: #fff; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+    .bg-yellow { background: #f59e0b; color: #fff; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
+    .bg-purple { background: #a855f7; color: #fff; box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3); }
+
+    .feature-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--text-main);
+    }
+
+    .feature-card p {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    /* Footer Section */
+    footer {
+      width: 100%;
+      background: var(--footer-bg);
+      border-top: 1px solid var(--input-border);
+      padding: 25px 15px;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .social-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--input-border);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .social-icon:hover {
+      background: #6366f1;
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    .footer-quote {
+      margin-bottom: 8px;
+      color: var(--text-main);
+      font-size: 13px;
+    }
+
+    .footer-copy {
+      color: var(--text-sub);
+      font-size: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .elapsed-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="logo-area" onclick="goHome()">
+      <div class="logo-icon">
+        <i class="fa-solid fa-calculator"></i>
+      </div>
+      <div class="logo-text">
+        <h2 id="logoTitle">Age Calculator</h2>
+        <span id="logoSubtitle">বয়স ক্যালকুলেটর</span>
+      </div>
+    </div>
+    
+    <div class="nav-actions">
+      <!-- Language Switcher Switch Button -->
+      <button class="lang-toggle-btn" onclick="toggleLanguage()" id="langBtn" title="Switch Language">
+        <i class="fa-solid fa-globe"></i>
+        <span id="langText">EN</span>
+      </button>
+
+      <!-- Theme Switcher -->
+      <div class="theme-toggle">
+        <button class="theme-btn active" id="btnDark" onclick="setTheme('dark')"><i class="fa-solid fa-moon"></i></button>
+        <button class="theme-btn" id="btnLight" onclick="setTheme('light')"><i class="fa-solid fa-sun"></i></button>
+      </div>
+
+      <!-- Menu Button -->
+      <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
+
+  <!-- Slide Overlay Menu -->
+  <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+  <div class="side-menu" id="sideMenu">
+    <div class="menu-header">
+      <h3 id="menuTitle">Menu Navigation</h3>
+      <button class="close-menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <ul class="menu-links">
+      <li><a onclick="goHome()"><i class="fa-solid fa-house"></i> <span id="mHome">Home</span></a></li>
+      <li><a onclick="openModal('aboutModal')"><i class="fa-solid fa-circle-info"></i> <span id="mAbout">About Us</span></a></li>
+      <li><a onclick="openModal('privacyModal')"><i class="fa-solid fa-shield-halved"></i> <span id="mPrivacy">Privacy Policy</span></a></li>
+      <li><a onclick="openModal('contactModal')"><i class="fa-solid fa-envelope"></i> <span id="mContact">Contact Us</span></a></li>
+      <li><a onclick="shareApp()"><i class="fa-solid fa-share-nodes"></i> <span id="mShare">Share</span></a></li>
+    </ul>
+  </div>
+
+  <!-- ABOUT US MODAL -->
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-circle-info"></i> <span id="modalAboutTitle">About Us</span></h3>
+        <button class="close-modal-btn" onclick="closeModal('aboutModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <h4>Welcome to Age Calculator BD</h4>
+        <p><strong>Hi, I am SUMON</strong><br>Founder of Age Calculator BD.</p>
+        <p>Our goal is to make age calculation simple, fast, accurate, and accessible to everyone. With just your date of birth, you can quickly calculate your current age and explore useful information about the time you have lived.</p>
+        <p>This website was created by Sumon, a web enthusiast with a passion for technology and building simple, useful digital tools. The idea behind Age Calculator is to provide users with a clean, easy-to-use, and reliable platform for calculating their age within seconds.</p>
+        
+        <h4>Our Mission</h4>
+        <p>We aim to:</p>
+        <ul>
+          <li>Provide fast and accurate age calculations</li>
+          <li>Create a simple and user-friendly experience</li>
+          <li>Make the website accessible on mobile, tablet, and desktop devices</li>
+          <li>Keep the interface clean, modern, and easy to understand</li>
+          <li>Continuously improve the website with useful features</li>
+        </ul>
+        <p>We believe that useful technology should be simple enough for everyone to use. That's why we designed Age Calculator with simplicity, speed, and user experience in mind.</p>
+        <p>Thank you for visiting and using our website.</p>
+        <p><strong>Age Calculator — Simple, Fast & Accurate.</strong></p>
+        <br>
+        <p><strong>— Sumon</strong><br>Founder & Developer<br>Email: <a href="mailto:founder.age@gmail.com">founder.age@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIVACY POLICY MODAL -->
+  <div class="modal-overlay" id="privacyModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-shield-halved"></i> <span id="modalPrivacyTitle">Privacy Policy</span></h3>
+        <button class="close-modal-btn" onclick="closeModal('privacyModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p><small style="color: #a855f7;">Last Updated: September 28, 2026</small></p>
+        <p>Welcome to Age Calculator BD. Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect information when you visit and use our website.</p>
+        
+        <h4>1. Information We Collect</h4>
+        <p>Age Calculator BD is designed to work without requiring users to create an account or provide personal information.</p>
+        <p>When you use our Age Calculator, you may enter information such as your date of birth. This information is used only to calculate your age and provide the requested result.</p>
+        <p>We do not intentionally collect sensitive personal information through the Age Calculator.</p>
+
+        <h4>2. How We Use Information</h4>
+        <p>Any information entered into the calculator is used to:</p>
+        <ul>
+          <li>Calculate your age accurately</li>
+          <li>Provide the requested results</li>
+          <li>Improve the functionality and user experience of our website</li>
+          <li>Maintain the security and performance of the website</li>
+        </ul>
+        <p>We do not sell, rent, or intentionally share your personal information with third parties for their own marketing purposes.</p>
+
+        <h4>3. Cookies</h4>
+        <p>Our website may use cookies or similar technologies to improve functionality, understand website usage, and provide a better user experience.</p>
+        <p>If third-party services such as analytics or advertising are used on this website, those services may use cookies according to their own privacy policies.</p>
+
+        <h4>4. Third-Party Services</h4>
+        <p>We may use trusted third-party services for purposes such as website analytics, hosting, security, or advertising.</p>
+        <p>These third-party services may collect certain technical information, such as browser type, device information, IP address, or general usage data, according to their respective privacy policies.</p>
+
+        <h4>5. Data Security</h4>
+        <p>We take reasonable measures to protect information and maintain the security of our website. However, no online service can guarantee complete security of information transmitted over the Internet.</p>
+
+        <h4>6. Children's Privacy</h4>
+        <p>Our website is intended for general audiences. We do not knowingly collect personal information from children.</p>
+
+        <h4>7. External Links</h4>
+        <p>Our website may contain links to external websites. We are not responsible for the privacy practices, content, or security of third-party websites. We encourage users to review the privacy policies of those websites before providing any personal information.</p>
+
+        <h4>8. Changes to This Privacy Policy</h4>
+        <p>We may update this Privacy Policy from time to time to reflect changes in our website, services, or applicable requirements.</p>
+        <p>Any changes will be posted on this page with an updated Last Updated date.</p>
+
+        <h4>9. Contact Us</h4>
+        <p>If you have any questions or concerns about this Privacy Policy, you can contact us at:</p>
+        <p><strong>Founder:</strong> Sumon<br>
+        <strong>Website:</strong> Age Calculator BD<br>
+        <strong>Email:</strong> <a href="mailto:founder.age@gmail.com">founder.age@gmail.com</a></p>
+        
+        <p>Thank you for using Age Calculator BD.</p>
+        <p><strong>— Sumon</strong><br>Founder & Developer, Age Calculator BD</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT US MODAL -->
+  <div class="modal-overlay" id="contactModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-envelope"></i> <span id="modalContactTitle">Contact Us</span></h3>
+        <button class="close-modal-btn" onclick="closeModal('contactModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>If you have any questions, suggestions, feedback, or need assistance, please feel free to contact us.</p>
+        <br>
+        <p><strong>Email:</strong> <a href="mailto:founder.age@gmail.com">founder.age@gmail.com</a><br>
+        <strong>WhatsApp:</strong> <a href="https://wa.me/8801854483300" target="_blank">01854483300</a></p>
+        <br>
+        <p>We value your feedback and will try our best to respond to your queries as soon as possible.</p>
+        <br>
+        <p><strong>— Sumon</strong><br>Founder & Developer<br>Age Calculator BD</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Live Breaking News Ticker (Bangla, English, Hindi) -->
+    <div class="news-ticker-container">
+      <div class="ticker-badge">
+        <i class="fa-solid fa-circle-dot fa-beat"></i>
+        <span>NOTICE</span>
+      </div>
+      <div class="ticker-content">
+        <div class="ticker-text">
+          <span><b></b> Note : আপনার সময়ের মূল্য অনেক, তাই কোথায় কীভাবে খরচ করছেন অবশ্যই ভেবে দেখবেন। ভালো থাকুন সুস্থ থাকুন 💜</span>
+          <span class="sep">•</span>
+          <span><b></b> Note : Your time is valuable, so definitely think about where and how you spend it. Stay well, stay healthy 💜</span>
+          <span class="sep">•</span>
+          <span><b></b> Note : आपका समय बहुत कीमती है, इसलिए ध्यान दें कि आप इसे कहाँ और कैसे खर्च कर रहे हैं। स्वस्थ रहें, मस्त रहें 💜</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-icon-wrapper">
+        <i class="fa-solid fa-calculator"></i>
+      </div>
+      <h1 class="hero-title" id="heroTitle">বয়স ক্যালকুলেটর</h1>
+      <p class="hero-subtitle" id="heroSubtitle">আপনার সঠিক তথ্য নিশ্চিত করুন<br>আপনার বর্তমান বয়স হিসাব করুন</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="calc-card">
+      <div class="card-header">
+        <i class="fa-regular fa-calendar-days"></i>
+        <span id="cardTitle">জন্ম তারিখ নির্বাচন করুন</span>
+      </div>
+
+      <div class="date-selectors">
+        <!-- Day -->
+        <div class="select-group">
+          <i class="fa-regular fa-calendar left-icon"></i>
+          <select id="daySelect">
+            <option value="" id="optDay">দিন</option>
+          </select>
+          <i class="fa-solid fa-chevron-down arrow-down"></i>
+        </div>
+
+        <!-- Month -->
+        <div class="select-group">
+          <i class="fa-regular fa-calendar left-icon"></i>
+          <select id="monthSelect">
+            <option value="" id="optMonth">মাস</option>
+          </select>
+          <i class="fa-solid fa-chevron-down arrow-down"></i>
+        </div>
+
+        <!-- Year -->
+        <div class="select-group">
+          <i class="fa-regular fa-calendar left-icon"></i>
+          <select id="yearSelect">
+            <option value="" id="optYear">বছর</option>
+          </select>
+          <i class="fa-solid fa-chevron-down arrow-down"></i>
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="calculateAge()">
+        <i class="fa-solid fa-calculator"></i>
+        <span id="btnCalculateText">হিসাব করুন</span>
+        <div class="btn-icon-right">
+          <i class="fa-solid fa-arrow-right"></i>
+        </div>
+      </button>
+
+      <button class="btn-reset" onclick="resetForm()">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span id="btnResetText">রিসেট করুন</span>
+      </button>
+
+      <!-- Output Result -->
+      <div class="result-box" id="resultBox">
+        <!-- Main Age -->
+        <div class="main-age-card">
+          <div class="result-title" id="resTitle">আপনার বর্তমান বয়স</div>
+          <div class="result-value" id="resultValue">-</div>
+        </div>
+
+        <!-- Elapsed Life Time -->
+        <div class="elapsed-section-title">
+          <i class="fa-solid fa-hourglass-half" style="color: #a855f7;"></i>
+          <span id="elapsedHeader">আপনার জীবনের অতিবাহিত সময়</span>
+        </div>
+
+        <div class="elapsed-grid">
+          <div class="stat-card">
+            <div class="val" id="elapsedYears">0</div>
+            <div class="lbl" id="lblYears">মোট বছর</div>
+          </div>
+          <div class="stat-card">
+            <div class="val" id="elapsedMonths">0</div>
+            <div class="lbl" id="lblMonths">মোট মাস</div>
+          </div>
+          <div class="stat-card">
+            <div class="val" id="elapsedDays">0</div>
+            <div class="lbl" id="lblDays">মোট দিন</div>
+          </div>
+          <div class="stat-card">
+            <div class="val" id="elapsedHours">0</div>
+            <div class="lbl" id="lblHours">মোট ঘণ্টা</div>
+          </div>
+          <div class="stat-card">
+            <div class="val" id="elapsedMinutes">0</div>
+            <div class="lbl" id="lblMinutes">মোট মিনিট</div>
+          </div>
+          <div class="stat-card">
+            <div class="val" id="elapsedSeconds">0</div>
+            <div class="lbl" id="lblSeconds">মোট সেকেন্ড</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Features -->
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon bg-green">
+          <i class="fa-regular fa-calendar-check"></i>
+        </div>
+        <h4 id="f1Title">সঠিক হিসাব</h4>
+        <p id="f1Sub">নির্ভুল ফলাফল</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon bg-blue">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <h4 id="f2Title">দ্রুত ও সহজ</h4>
+        <p id="f2Sub">এক ক্লিকেই ফলাফল</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon bg-yellow">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h4 id="f3Title">নিরাপদ</h4>
+        <p id="f3Sub">আপনার তথ্য নিরাপদ</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon bg-purple">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <h4 id="f4Title">সহজ ব্যবহার</h4>
+        <p id="f4Sub">সব ডিভাইসে সাপোর্ট</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer with Social Media Links -->
+  <footer>
+    <div class="social-links">
+      <a href="https://www.facebook.com/share/1DdUzdR46D/" target="_blank" class="social-icon" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="https://x.com/Sumon_XM" target="_blank" class="social-icon" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+      <a href="https://www.instagram.com/tuhin_ixr?stkn=MWdqMW9iamRlaG1oYQ==" target="_blank" class="social-icon" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://linkedin.com" target="_blank" class="social-icon" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a href="https://github.com" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
+      <a href="https://youtube.com/@cozy_minds01?si=tTCQ4vBrb9Tj3xnU" target="_blank" class="social-icon" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+    </div>
+    <div class="footer-quote" id="footerQuote">
+      <i class="fa-solid fa-heart" style="color: #a855f7;"></i> সময় অমূল্য, প্রতিটি মুহূর্ত সুন্দরভাবে বাঁচুন।
+    </div>
+    <div class="footer-copy" id="footerCopy">
+      © 2026 Age Calculator BD • সর্বস্বত্ব সংরক্ষিত • Developed and designed by SUMON
+    </div>
+  </footer>
+
+  <script>
+    // Language State ('bn' or 'en')
+    let currentLang = 'bn';
+
+    const translations = {
+      bn: {
+        langBtnText: "EN",
+        heroTitle: "বয়স ক্যালকুলেটর",
+        heroSubtitle: "আপনার সঠিক জন্ম তারিখ প্রবেশ করে সহজেই<br>আপনার বর্তমান বয়স হিসাব করুন",
+        cardTitle: "জন্ম তারিখ নির্বাচন করুন",
+        optDay: "দিন",
+        optMonth: "মাস",
+        optYear: "বছর",
+        btnCalculate: "হিসাব করুন",
+        btnReset: "রিসেট করুন",
+        resTitle: "আপনার বর্তমান বয়স",
+        elapsedHeader: "আপনার জীবনের অতিবাহিত সময়",
+        lblYears: "মোট বছর",
+        lblMonths: "মোট মাস",
+        lblDays: "মোট দিন",
+        lblHours: "মোট ঘণ্টা",
+        lblMinutes: "মোট মিনিট",
+        lblSeconds: "মোট সেকেন্ড",
+        f1Title: "সঠিক হিসাব",
+        f1Sub: "নির্ভুল ফলাফল",
+        f2Title: "দ্রুত ও সহজ",
+        f2Sub: "এক ক্লিকেই ফলাফল",
+        f3Title: "নিরাপদ",
+        f3Sub: "আপনার তথ্য নিরাপদ",
+        f4Title: "সহজ ব্যবহার",
+        f4Sub: "সব ডিভাইসে সাপোর্ট",
+        footerQuote: '<i class="fa-solid fa-heart" style="color: #a855f7;"></i> সময় অমূল্য, প্রতিটি মুহূর্ত সুন্দরভাবে বাঁচুন।',
+        footerCopy: '© 2026 Age Calculator BD • সর্বস্বত্ব সংরক্ষিত • Developed and designed by SUMON',
+        menuTitle: "মেনু নেভিগেশন",
+        mHome: "Home",
+        mAbout: "About Us",
+        mPrivacy: "Privacy Policy",
+        mContact: "Contact Us",
+        mShare: "Share",
+        months: ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"],
+        units: { years: "বছর", months: "মাস", days: "দিন" },
+        alerts: {
+          selectDate: "দয়া করে দিন, মাস এবং বছর সঠিকভাবে নির্বাচন করুন।",
+          futureDate: "জন্ম তারিখ ভবিষ্যতের হতে পারে না!"
+        }
+      },
+      en: {
+        langBtnText: "BN",
+        heroTitle: "Age Calculator",
+        heroSubtitle: "Easily calculate your exact current age<br>by entering your date of birth",
+        cardTitle: "Select Date of Birth",
+        optDay: "Day",
+        optMonth: "Month",
+        optYear: "Year",
+        btnCalculate: "Calculate Age",
+        btnReset: "Reset",
+        resTitle: "Your Current Age",
+        elapsedHeader: "Elapsed Time of Your Life",
+        lblYears: "Total Years",
+        lblMonths: "Total Months",
+        lblDays: "Total Days",
+        lblHours: "Total Hours",
+        lblMinutes: "Total Minutes",
+        lblSeconds: "Total Seconds",
+        f1Title: "Accurate",
+        f1Sub: "Precise Results",
+        f2Title: "Fast & Easy",
+        f2Sub: "Result in 1 Click",
+        f3Title: "Secure",
+        f3Sub: "Your Data is Safe",
+        f4Title: "Easy to Use",
+        f4Sub: "Supports All Devices",
+        footerQuote: '<i class="fa-solid fa-heart" style="color: #a855f7;"></i> Time is priceless, live every moment beautifully.',
+        footerCopy: '© 2026 Age Calculator BD • All Rights Reserved • Developed and designed by SUMON',
+        menuTitle: "Menu Navigation",
+        mHome: "Home",
+        mAbout: "About Us",
+        mPrivacy: "Privacy Policy",
+        mContact: "Contact Us",
+        mShare: "Share",
+        months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        units: { years: "Years", months: "Months", days: "Days" },
+        alerts: {
+          selectDate: "Please select day, month, and year correctly.",
+          futureDate: "Date of birth cannot be in the future!"
+        }
+      }
+    };
+
+    // Populate Select Options
+    const daySelect = document.getElementById('daySelect');
+    const monthSelect = document.getElementById('monthSelect');
+    const yearSelect = document.getElementById('yearSelect');
+
+    function populateSelects() {
+      // Days
+      const selectedDay = daySelect.value;
+      daySelect.innerHTML = `<option value="">${translations[currentLang].optDay}</option>`;
+      for (let i = 1; i <= 31; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = currentLang === 'bn' ? toBanglaNum(i) : i;
+        daySelect.appendChild(opt);
+      }
+      daySelect.value = selectedDay;
+
+      // Months
+      const selectedMonth = monthSelect.value;
+      monthSelect.innerHTML = `<option value="">${translations[currentLang].optMonth}</option>`;
+      translations[currentLang].months.forEach((month, index) => {
+        const opt = document.createElement('option');
+        opt.value = index + 1;
+        opt.textContent = month;
+        monthSelect.appendChild(opt);
+      });
+      monthSelect.value = selectedMonth;
+
+      // Years
+      const selectedYear = yearSelect.value;
+      yearSelect.innerHTML = `<option value="">${translations[currentLang].optYear}</option>`;
+      const currentYear = new Date().getFullYear();
+      for (let i = currentYear; i >= 1900; i--) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = currentLang === 'bn' ? toBanglaNum(i) : i;
+        yearSelect.appendChild(opt);
+      }
+      yearSelect.value = selectedYear;
+    }
+
+    // Toggle Language Function
+    function toggleLanguage() {
+      currentLang = currentLang === 'bn' ? 'en' : 'bn';
+      const t = translations[currentLang];
+
+      document.getElementById('langText').textContent = t.langBtnText;
+      document.getElementById('heroTitle').innerHTML = t.heroTitle;
+      document.getElementById('heroSubtitle').innerHTML = t.heroSubtitle;
+      document.getElementById('cardTitle').textContent = t.cardTitle;
+      document.getElementById('btnCalculateText').textContent = t.btnCalculate;
+      document.getElementById('btnResetText').textContent = t.btnReset;
+      document.getElementById('resTitle').textContent = t.resTitle;
+      document.getElementById('elapsedHeader').textContent = t.elapsedHeader;
+      
+      document.getElementById('lblYears').textContent = t.lblYears;
+      document.getElementById('lblMonths').textContent = t.lblMonths;
+      document.getElementById('lblDays').textContent = t.lblDays;
+      document.getElementById('lblHours').textContent = t.lblHours;
+      document.getElementById('lblMinutes').textContent = t.lblMinutes;
+      document.getElementById('lblSeconds').textContent = t.lblSeconds;
+
+      document.getElementById('f1Title').textContent = t.f1Title;
+      document.getElementById('f1Sub').textContent = t.f1Sub;
+      document.getElementById('f2Title').textContent = t.f2Title;
+      document.getElementById('f2Sub').textContent = t.f2Sub;
+      document.getElementById('f3Title').textContent = t.f3Title;
+      document.getElementById('f3Sub').textContent = t.f3Sub;
+      document.getElementById('f4Title').textContent = t.f4Title;
+      document.getElementById('f4Sub').textContent = t.f4Sub;
+
+      document.getElementById('footerQuote').innerHTML = t.footerQuote;
+      document.getElementById('footerCopy').innerHTML = t.footerCopy;
+      document.getElementById('menuTitle').textContent = t.menuTitle;
+
+      document.getElementById('mHome').textContent = t.mHome;
+      document.getElementById('mAbout').textContent = t.mAbout;
+      document.getElementById('mPrivacy').textContent = t.mPrivacy;
+      document.getElementById('mContact').textContent = t.mContact;
+      document.getElementById('mShare').textContent = t.mShare;
+
+      populateSelects();
+
+      // Recalculate if result box is visible
+      if (document.getElementById('resultBox').classList.contains('show')) {
+        calculateAge();
+      }
+    }
+
+    // Convert Numbers to Bangla Digits
+    function toBanglaNum(num) {
+      const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      return num.toString().replace(/\d/g, d => banglaDigits[d]);
+    }
+
+    function formatNumber(num) {
+      if (currentLang === 'bn') {
+        return toBanglaNum(num.toLocaleString('en-US'));
+      }
+      return num.toLocaleString('en-US');
+    }
+
+    // Theme Switcher Logic
+    function setTheme(theme) {
+      if (theme === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('btnLight').classList.add('active');
+        document.getElementById('btnDark').classList.remove('active');
+      } else {
+        document.body.classList.remove('light-mode');
+        document.getElementById('btnDark').classList.add('active');
+        document.getElementById('btnLight').classList.remove('active');
+      }
+    }
+
+    // Menu Sidebar Logic
+    function toggleMenu() {
+      const sideMenu = document.getElementById('sideMenu');
+      const menuOverlay = document.getElementById('menuOverlay');
+      sideMenu.classList.toggle('active');
+      menuOverlay.classList.toggle('active');
+    }
+
+    // Navigation & Modal Controls
+    function goHome() {
+      document.getElementById('sideMenu').classList.remove('active');
+      document.getElementById('menuOverlay').classList.remove('active');
+      
+      closeModal('aboutModal');
+      closeModal('privacyModal');
+      closeModal('contactModal');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openModal(id) {
+      document.getElementById('sideMenu').classList.remove('active');
+      document.getElementById('menuOverlay').classList.remove('active');
+
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    // Web Share API
+    function shareApp() {
+      toggleMenu();
+      if (navigator.share) {
+        navigator.share({
+          title: 'Age Calculator BD',
+          text: currentLang === 'bn' ? 'সহজেই আপনার বয়স হিসাব করুন!' : 'Easily calculate your exact age!',
+          url: window.location.href,
+        }).catch(() => {});
+      } else {
+        alert(currentLang === 'bn' ? 'আপনার ব্রাউজারে শেয়ার সুবিধা সমর্থিত নয়।' : 'Share option not supported on this browser.');
+      }
+    }
+
+    // Live Real-Time Timer
+    let liveInterval = null;
+
+    function calculateAge() {
+      const day = parseInt(daySelect.value);
+      const month = parseInt(monthSelect.value);
+      const year = parseInt(yearSelect.value);
+
+      if (!day || !month || !year) {
+        alert(translations[currentLang].alerts.selectDate);
+        return;
+      }
+
+      const birthDate = new Date(year, month - 1, day, 0, 0, 0);
+      const now = new Date();
+
+      if (birthDate > now) {
+        alert(translations[currentLang].alerts.futureDate);
+        return;
+      }
+
+      if (liveInterval) clearInterval(liveInterval);
+
+      function updateAgeDetails() {
+        const today = new Date();
+
+        // Exact Y/M/D
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
+        let days = today.getDate() - birthDate.getDate();
+
+        if (days < 0) {
+          months--;
+          const prevMonthDays = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+          days += prevMonthDays;
+        }
+
+        if (months < 0) {
+          years--;
+          months += 12;
+        }
+
+        // Total Elapsed Units
+        const diffMs = today - birthDate;
+        const totalSeconds = Math.floor(diffMs / 1000);
+        const totalMinutes = Math.floor(totalSeconds / 60);
+        const totalHours = Math.floor(totalMinutes / 60);
+        const totalDays = Math.floor(totalHours / 24);
+        const totalMonths = (years * 12) + months;
+
+        const u = translations[currentLang].units;
+
+        // Display Data
+        document.getElementById('resultValue').textContent = `${formatNumber(years)} ${u.years}, ${formatNumber(months)} ${u.months}, ${formatNumber(days)} ${u.days}`;
+
+        document.getElementById('elapsedYears').textContent = formatNumber(years);
+        document.getElementById('elapsedMonths').textContent = formatNumber(totalMonths);
+        document.getElementById('elapsedDays').textContent = formatNumber(totalDays);
+        document.getElementById('elapsedHours').textContent = formatNumber(totalHours);
+        document.getElementById('elapsedMinutes').textContent = formatNumber(totalMinutes);
+        document.getElementById('elapsedSeconds').textContent = formatNumber(totalSeconds);
+      }
+
+      updateAgeDetails();
+      liveInterval = setInterval(updateAgeDetails, 1000);
+
+      document.getElementById('resultBox').classList.add('show');
+    }
+
+    // Reset Form
+    function resetForm() {
+      daySelect.value = '';
+      monthSelect.value = '';
+      yearSelect.value = '';
+      if (liveInterval) clearInterval(liveInterval);
+      document.getElementById('resultBox').classList.remove('show');
+    }
+
+    // Initial Load
+    populateSelects();
+  </script>
+</body>
+</html>
